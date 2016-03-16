@@ -3,9 +3,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.javafx.beans.annotations.NonNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,8 +43,8 @@ public class MarionetteClient {
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         writer = new OutputStreamWriter(socket.getOutputStream(), "UTF-8");
 
-        final JSONObject handshakeJSON = new JSONObject(readResponse());
-        final int marionetteProtocol = handshakeJSON.optInt("marionetteProtocol", -1);
+        final JsonObject handshakeJSON = new JsonParser().parse(readResponse()).getAsJsonObject();
+        final int marionetteProtocol = handshakeJSON.get("marionetteProtocol").getAsInt();
         if (MARIONETTE_PROTOCOL_NUMBER != marionetteProtocol) {
             throw new IllegalStateException("bad marionetteProtocol in handshake, expected: " + MARIONETTE_PROTOCOL_NUMBER + ", got: " + marionetteProtocol);
         }
@@ -104,16 +105,16 @@ public class MarionetteClient {
         return new String(message);
     }
 
-    public JSONArray sendCommand(@NonNull String command, @NonNull JSONObject parameters) throws IOException {
+    public JsonArray sendCommand(@NonNull String command, @NonNull JsonObject parameters) throws IOException {
         final int msgId = id.getAndIncrement();
 
         // TODO: check connection status.
         // [type, msgid, command, parameters]
-        final JSONArray commandArray = new JSONArray();
-        commandArray.put(0, 0);
-        commandArray.put(1, msgId);
-        commandArray.put(2, command);
-        commandArray.put(3, parameters);
+        final JsonArray commandArray = new JsonArray();
+        commandArray.add(0);
+        commandArray.add(msgId);
+        commandArray.add(command);
+        commandArray.add(parameters);
 
         final String serialization = commandArray.toString();
         writer.write(Integer.toString(serialization.length()));
@@ -136,13 +137,13 @@ public class MarionetteClient {
             System.out.println(responseString);
         }
 
-        final JSONArray responseArray = new JSONArray(responseString);
-        if (1 != responseArray.optInt(0, -1)) {
+        final JsonArray responseArray = new JsonParser().parse(responseString).getAsJsonArray();
+        if (1 != responseArray.get(0).getAsInt()) {
             // TODO: handle (or drop) incoming commands.
             throw new IllegalStateException("got command when expecting response");
         }
-        if (msgId != responseArray.optInt(1 , -1)) {
-            throw new IllegalStateException("got response for wrong msgId, expected: " + msgId + ", got: " + responseArray.opt(1));
+        if (msgId != responseArray.get(1).getAsInt()) {
+            throw new IllegalStateException("got response for wrong msgId, expected: " + msgId + ", got: " + responseArray.get(1));
         }
         return responseArray;
     }

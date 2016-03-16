@@ -15,6 +15,7 @@ public class MarionetteDriverTest {
     @Before
     public void setUp() throws Exception {
         client = new MarionetteClient();
+        client.verbose = true;
         driver = new MarionetteDriver(client, DesiredCapabilities.firefox(), null);
     }
 
@@ -24,7 +25,7 @@ public class MarionetteDriverTest {
     }
 
     @Test
-    public void test() {
+    public void testGetWindowHandle() {
         Assert.assertNotNull(driver.getWindowHandle());
     }
 
@@ -47,7 +48,7 @@ public class MarionetteDriverTest {
     }
 
     @Test
-    public void testX() {
+    public void testFindElement() {
         driver.navigate().to("https://mozilla.org");
         final WebElement element = driver.findElement(By.id("home"));
         Assert.assertNotNull(element);
