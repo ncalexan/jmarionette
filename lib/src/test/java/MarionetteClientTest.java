@@ -3,6 +3,7 @@ import com.google.gson.JsonObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.marionette.MarionetteClient;
 
 import java.io.IOException;
 

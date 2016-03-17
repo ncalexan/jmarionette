@@ -3,6 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+package org.openqa.selenium.marionette;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,7 +31,7 @@ public class MarionetteClient {
     protected BufferedReader reader;
     protected OutputStreamWriter writer;
 
-    protected boolean verbose = false;
+    public boolean verbose = false;
 
     public MarionetteClient() {
     }
