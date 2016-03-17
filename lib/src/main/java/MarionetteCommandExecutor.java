@@ -7,7 +7,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.javafx.beans.annotations.NonNull;
 import org.openqa.selenium.remote.BeanToJsonConverter;
 import org.openqa.selenium.remote.Command;
 import org.openqa.selenium.remote.CommandExecutor;
@@ -27,7 +26,7 @@ public class MarionetteCommandExecutor implements CommandExecutor {
 
     final MarionetteClient client;
 
-    public MarionetteCommandExecutor(@NonNull MarionetteClient client) {
+    public MarionetteCommandExecutor(MarionetteClient client) {
         this.client = client;
     }
 
@@ -36,7 +35,7 @@ public class MarionetteCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public Response execute(@NonNull Command command) throws IOException {
+    public Response execute(Command command) throws IOException {
         final JsonObject parametersJson = new JsonParser().parse(beanToJsonConverter.convert(command.getParameters())).getAsJsonObject();
         final SessionId sessionId = command.getSessionId();
         if (sessionId != null) {

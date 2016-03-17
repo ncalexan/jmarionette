@@ -6,7 +6,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.javafx.beans.annotations.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -105,7 +104,7 @@ public class MarionetteClient {
         return new String(message);
     }
 
-    public JsonArray sendCommand(@NonNull String command, @NonNull JsonObject parameters) throws IOException {
+    public JsonArray sendCommand(String command, JsonObject parameters) throws IOException {
         final int msgId = id.getAndIncrement();
 
         // TODO: check connection status.
