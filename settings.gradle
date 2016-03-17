@@ -1,2 +1,2 @@
-rootProject.name = 'jmarionette'
-
+include ':lib'
+include ':app'
